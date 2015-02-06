@@ -3,7 +3,6 @@ package tekwin.org.snap;
 import android.app.Application;
 
 import com.parse.Parse;
-import com.parse.ParseObject;
 
 /**
  * Created by adamdebbagh on 2/5/15.
@@ -27,10 +26,7 @@ public class SnapApplication extends Application {
 
         Parse.initialize(this, "aXZpEI7jDUhsrVxaTuNtBjeT5e4Th3a2XyUFrfYy", "i8ek1i1teoSurbN7nlahFYpHks1m39Xfu7Ac621M");
 
-        //test
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+
 
 
     }
