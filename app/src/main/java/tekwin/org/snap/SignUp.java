@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -26,6 +27,8 @@ public class SignUp extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // progress bar
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_sign_up);
 
         //initialize Views
@@ -58,9 +61,9 @@ public class SignUp extends ActionBarActivity {
 
                 }
                 else{
-
+                    //add pregress bar
+                    setProgressBarIndeterminateVisibility(true);
                     // sign up user
-
                     ParseUser newUser = new ParseUser();
                     newUser.setUsername(username);
                     newUser.setPassword(password);
@@ -69,6 +72,8 @@ public class SignUp extends ActionBarActivity {
                     newUser.signUpInBackground(new SignUpCallback() {
                         @Override
                         public void done(ParseException e) {
+                            //remove progress bar
+                            setProgressBarIndeterminateVisibility(false);
 
                             if (e == null) {
                                 //success!

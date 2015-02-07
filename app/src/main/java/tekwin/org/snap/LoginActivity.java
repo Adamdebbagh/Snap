@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,6 +29,9 @@ public class LoginActivity extends ActionBarActivity {
     protected TextView mSignUpTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //progress bar
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -57,7 +61,7 @@ public class LoginActivity extends ActionBarActivity {
                 password = password.trim();
 
 
-                // check text fields aren't empy. communicate with user through a dialog
+                // check text fields aren't empty. communicate with user through a dialog
                 if (username.isEmpty() || password.isEmpty()) {
                     AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this)
                             .setTitle(getString(R.string.signup_error_title))
@@ -70,10 +74,14 @@ public class LoginActivity extends ActionBarActivity {
 
                 } else {
 
+                    //add progress bar
+                    setProgressBarIndeterminateVisibility(true);
                     //login user
                     ParseUser.logInInBackground(username,password, new LogInCallback() {
                         @Override
                         public void done(ParseUser user, ParseException e) {
+                            //remove progress bar
+                            setProgressBarIndeterminateVisibility(false);
 
                             if (e==null){
                                 // success
