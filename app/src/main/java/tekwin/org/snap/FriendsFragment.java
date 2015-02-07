@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 /**
  * Created by adamdebbagh on 2/4/15.
  */
