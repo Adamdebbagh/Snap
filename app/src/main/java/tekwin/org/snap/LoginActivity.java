@@ -31,7 +31,7 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //progress bar
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -75,13 +75,13 @@ public class LoginActivity extends ActionBarActivity {
                 } else {
 
                     //add progress bar
-                    setProgressBarIndeterminateVisibility(true);
+                    setSupportProgressBarIndeterminateVisibility(true);
                     //login user
                     ParseUser.logInInBackground(username,password, new LogInCallback() {
                         @Override
                         public void done(ParseUser user, ParseException e) {
                             //remove progress bar
-                            setProgressBarIndeterminateVisibility(false);
+                            setSupportProgressBarIndeterminateVisibility(false);
 
                             if (e==null){
                                 // success

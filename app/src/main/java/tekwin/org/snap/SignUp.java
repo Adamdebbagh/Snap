@@ -26,9 +26,10 @@ public class SignUp extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         // progress bar
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_sign_up);
 
         //initialize Views
@@ -62,7 +63,7 @@ public class SignUp extends ActionBarActivity {
                 }
                 else{
                     //add pregress bar
-                    setProgressBarIndeterminateVisibility(true);
+                    setSupportProgressBarIndeterminateVisibility(true);
                     // sign up user
                     ParseUser newUser = new ParseUser();
                     newUser.setUsername(username);
@@ -73,7 +74,7 @@ public class SignUp extends ActionBarActivity {
                         @Override
                         public void done(ParseException e) {
                             //remove progress bar
-                            setProgressBarIndeterminateVisibility(false);
+                            setSupportProgressBarIndeterminateVisibility(false);
 
                             if (e == null) {
                                 //success!

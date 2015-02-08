@@ -5,9 +5,14 @@ package tekwin.org.snap;
  */
 public class ParseConstant {
 
-    //class constants
+    //class names
 
-    // field constants
+    // field names
 
     public static final String KEY_USERNAME = "username";
+    public static final String KEY_FRIENDS_RELATION = "friendsRelation";
+
+    // Parameters names
+
+    public static final int QUERY_LIMIT = 1000;
 }
