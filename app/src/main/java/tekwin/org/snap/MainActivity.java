@@ -252,6 +252,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 sendBroadcast(mediaScanIntent);
                 Toast.makeText(this, "Saved!", Toast.LENGTH_LONG).show();
             }
+
+            Intent recipientsIntent = new Intent(this,RecipientsActivity.class);
+            recipientsIntent.setData(mMediaUri);
+            startActivity(recipientsIntent);
         }
         else if (resultCode == RESULT_CANCELED){
             Toast.makeText(this,"Canceled!",Toast.LENGTH_LONG).show();
