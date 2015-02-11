@@ -9,16 +9,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,6 +35,7 @@ public class RecipientsActivity extends ActionBarActivity {
     protected ParseUser mCurrentUser ;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected TextView emptyLabel;
+    protected MenuItem mSendMenuItem;
 
 
     @Override
@@ -40,6 +46,18 @@ public class RecipientsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_recipients);
         emptyLabel = (TextView) findViewById(R.id.emptyrecipientlabel);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        // show send menu item when a recipient is checked
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView < ? > parent, View view,final int position, long id){
+                if (mListView.isItemChecked(position)){
+                mSendMenuItem.setVisible(true);
+                }
+                else {
+                    mSendMenuItem.setVisible(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -84,7 +102,7 @@ public class RecipientsActivity extends ActionBarActivity {
                 } else {
                     Log.e(TAG, e.getMessage());
                     // display error message
-                    erroMessageDialog(e);
+                    errorMessageDialog(e);
                 }
             }
         });
@@ -96,20 +114,13 @@ public class RecipientsActivity extends ActionBarActivity {
         }
         return mListView;
     }
-    private void erroMessageDialog(ParseException e) {
-        AlertDialog.Builder build = new AlertDialog.Builder(getListView().getContext())
-                .setTitle(getString(R.string.error_title))
-                .setMessage(e.getMessage())
-                .setPositiveButton(android.R.string.ok, null);
 
-        Dialog dialog = build.create();
-        dialog.show();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_recipients, menu);
+        mSendMenuItem = menu.getItem(0);
         return true;
     }
 
@@ -121,10 +132,88 @@ public class RecipientsActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send) {
+            //upload messages to backend
+            ParseObject message = createMessage();
+
+            if (message == null){
+                fileSelectedError();
+            }
+            else {
+                send(message);
+                finish();
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+    private ParseObject createMessage() {
+
+     ParseObject message = new ParseObject(ParseConstant.CLASSES_MESSAGES);
+
+        message.put(ParseConstant.KEY_SENDER_ID,mCurrentUser.getObjectId());
+        message.put(ParseConstant.KEY_SENDER_NAME,mCurrentUser.getUsername());
+        message.put(ParseConstant.KEY_RECIPIENT_ID,getRecipientIds());
+
+        return message;
+
+    }
+
+    private ArrayList<String> getRecipientIds() {
+
+        ArrayList<String> recipientIds = new ArrayList<>();
+        for (int i =0; i< getListView().getCount();i++){
+            if (getListView().isItemChecked(i)){
+                recipientIds.add(mFriends.get(i).getObjectId());
+            }
+        }
+        return recipientIds;
+    }
+
+    private void send(ParseObject message) {
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null){
+                    Toast.makeText(RecipientsActivity.this,R.string.sucees_message,Toast.LENGTH_LONG).show();
+                }
+                else{
+                    fileSentError();
+                }
+            }
+        });
+    }
+
+    private void fileSentError() {
+        AlertDialog.Builder build = new AlertDialog.Builder(getListView().getContext())
+                .setTitle(getString(R.string.error_title))
+                .setMessage(getString(R.string.file_sending_error))
+                .setPositiveButton(android.R.string.ok, null);
+
+        Dialog dialog = build.create();
+        dialog.show();
+    }
+    private void fileSelectedError() {
+        AlertDialog.Builder build = new AlertDialog.Builder(getListView().getContext())
+                .setTitle(getString(R.string.error_title))
+                .setMessage(getString(R.string.file_error))
+                .setPositiveButton(android.R.string.ok, null);
+
+        Dialog dialog = build.create();
+        dialog.show();
+    }
+    private void errorMessageDialog(ParseException e) {
+        AlertDialog.Builder build = new AlertDialog.Builder(getListView().getContext())
+                .setTitle(getString(R.string.error_title))
+                .setMessage(e.getMessage())
+                .setPositiveButton(android.R.string.ok, null);
+
+        Dialog dialog = build.create();
+        dialog.show();
     }
 }

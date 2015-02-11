@@ -30,6 +30,7 @@
     <string name="video_warning">The selected Video must be less than 10 MB !</string>
     <string name="file_error">There was a problem with the selected file !</string>
     <string name="file_warning">The selected file is too large! Select a new file </string>
+    <string name="menu_send_label">Send</string>
 
     <string-array name="camera_choices">
         <item> Take Picture</item>
@@ -40,5 +41,7 @@
 
     <string name="title_activity_recipients">Choose Recipients</string>
     <string name="empty_recipients">Choose some friends first</string>
+    <string name="sucees_message">Sent</string>
+    <string name="file_sending_error">There was an Error sending your message, Please Try again</string>
 
 </resources>
