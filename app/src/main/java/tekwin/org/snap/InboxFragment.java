@@ -18,6 +18,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Created by adamdebbagh on 2/4/15
@@ -68,9 +69,15 @@ public class InboxFragment extends ListFragment {
                     //ArrayAdapter<String> adapter = new ArrayAdapter<>(getListView().getContext(),
                       //      android.R.layout.simple_list_item_1, usernames);
                    //getListView().setAdapter(adapter);
+                    if (getListView().getAdapter() == null) {
+                        MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
+                        getListView().setAdapter(adapter);
+                    }
+                    else {
+                        //refill the adapter
+                        ((MessageAdapter)getListView().getAdapter()).refill(mMessages);
 
-                    MessageAdapter adapter = new MessageAdapter(getListView().getContext(),mMessages);
-                    getListView().setAdapter(adapter);
+                    }
                 }
             }
         });
@@ -97,7 +104,25 @@ public class InboxFragment extends ListFragment {
             Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
             intent.setDataAndType(fileUri,"video/*");
             startActivity(intent);
+        }
 
+        // Delete it
+        List<String> ids = message.getList(ParseConstant.KEY_RECIPIENT_ID);
+
+        if (ids.size() == 1){
+            //last recipient, delete the whole thing!
+            message.deleteInBackground();
+
+        }
+        else {
+            // remove the recipient and save
+            ids.remove(ParseUser.getCurrentUser().getObjectId());
+
+            ArrayList<String> idsToRemove = new ArrayList<>();
+            idsToRemove.add(ParseUser.getCurrentUser().getObjectId());
+
+            message.removeAll(ParseConstant.KEY_RECIPIENT_ID,idsToRemove);
+            message.saveInBackground();
 
 
         }
