@@ -43,5 +43,8 @@
     <string name="empty_recipients">Choose some friends first</string>
     <string name="sucees_message">Sent</string>
     <string name="file_sending_error">There was an Error sending your message, Please Try again</string>
+    <string name="imageicon_label">image label</string>
+    <string name="title_activity_view_image">Snap</string>
+    <string name="image_view">image view</string>
 
 </resources>

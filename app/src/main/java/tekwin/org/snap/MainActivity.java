@@ -255,6 +255,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
             Intent recipientsIntent = new Intent(this,RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
+
+            String fileType;
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
+                fileType = ParseConstant.TYPE_IMAGE;
+            }
+            else {
+                fileType = ParseConstant.TYPE_VIDEO;
+            }
+            recipientsIntent.putExtra(ParseConstant.KEY_FILE_TYPE,fileType);
             startActivity(recipientsIntent);
         }
         else if (resultCode == RESULT_CANCELED){
@@ -289,13 +298,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 AlertDialog dialog = builder.create();
                 dialog.show();
         }
-
-
-
-
-
-
-
         return super.onOptionsItemSelected(item);
     }
 
